@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Họ tên | MSSV</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="./public/css/styles.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="control">
+            <div class="row">
+                <div class="col-2">
+                    <!-- Nút start -->
+                    <button class="btn btn-primary" id="btn-start">Start</button>
+                </div>
+                <div class="col-8">
+                    <!-- Phép toán -->
+                    <div id="operation"></div>
+                </div>
+                <div class="col-2">
+                    <!-- Điểm -->
+                    <h2><span id="score" class="badge badge-pill">0</span></h2>
+                </div>
+            </div>
+        </div>
+        <!-- Vùng hiển thị hình tròn -->
+        <div id="game" style="width: 100vh !important;height: 100%!important;">
+            <!-- Div hình tròn mẫu -->
+
+        </div>
+    </div>
+
+    <script>
+        //ham random
+        function getRandomIntInclusive(min, max) {
+            min = Math.ceil(min);
+            max = Math.floor(max);
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+        let operator = ["+", "-"]
+        let ops;
+        const start = document.querySelector('#btn-start');
+        const game = document.querySelector('#game');
+        let total;
+        //  hàm tao hinh tron 
+        let createCircle = () => {
+            for (let i = 0; i < 9; i++) {
+                let a = getRandomIntInclusive(1, 100);
+                let b = getRandomIntInclusive(1, 100);
+                ops = operator[getRandomIntInclusive(0, 1)];
+                game.insertAdjacentHTML('beforeend', `<div class="circle" onclick='resultGame(${eval(a + ops + b)})'>${eval(a + ops + b)}</div>`)
+            }
+            game.insertAdjacentHTML('beforeend', `<div class="circle" onclick='resultGame(${total})'>${total}</div>`)
+        }
+        // thay doi vi tri
+
+        let changepos = (circle) => {
+            circle.forEach((item) => {
+                item.style.left = getRandomIntInclusive(0, 100) + 'vh';
+                item.style.top = getRandomIntInclusive(0, 100) + 'vh';
+            });
+        }
+
+        let Content = document.querySelector('#operation');
+
+        start.onclick = () => {
+            let a = getRandomIntInclusive(1, 100);
+            let b = getRandomIntInclusive(1, 100);
+
+            ops = operator[getRandomIntInclusive(0, 1)];
+            Content.innerHTML = a + ops + b;
+            total = eval(a + ops + b)
+            createCircle();
+            const circle = document.querySelectorAll('.circle');
+            changepos(circle);
+        };
+        let score = document.querySelector('#score');
+        resultGame = (result) => {
+            if (total === result) {
+                score.innerHTML = score.innerHTML + 1;
+                score.style.background = 'red'
+            } else {
+                score.innerHTML = score.innerHTML - 1;
+                score.style.background = 'yellow';
+                let a = getRandomIntInclusive(1, 100);
+                let b = getRandomIntInclusive(1, 100);
+
+                ops = operator[getRandomIntInclusive(0, 1)];
+                Content.innerHTML = a + ops + b;
+                const circle = document.querySelectorAll('.circle');
+                changepos(circle);
+            }
+
+        }
+    </script>
+
+</body>
+
+</html>
